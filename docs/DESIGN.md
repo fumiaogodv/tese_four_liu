@@ -2,6 +2,17 @@
 
 对应课程案例 **第 4 部分（数据处理）** 与 **第 5 部分（用户交互）**。
 
+## 第六部分：软件重构与交付
+| 要点 | 交付物 |
+| :--- | :--- |
+| OOP 重构 | `src/repositories/`、`src/services/`、`src/commands/` |
+| 重构前后 UML + 对比 | `docs/REFACTORING.md` |
+| 重构方法说明 | 同上（提取类、DI、Command 等） |
+| 打包可执行程序 | `dist\口算练习系统.exe` + `scripts/build.ps1` |
+| TDD | `docs/TDD.md` + `tests/test_tdd_session_id.py` |
+| 测试回归 | `pytest tests/ -v` → **29 passed** |
+
+
 ## 第 5 部分：程序集成与 CLI 界面
 
 - **单一入口**：`main.py` → `main()` → `Application.run()`

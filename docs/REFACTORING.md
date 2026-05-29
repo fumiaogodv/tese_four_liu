@@ -16,34 +16,34 @@ classDiagram
     direction TB
 
     class Application {
-        +run()
-        -_dispatch()
+        +run() 行
+        -_dispatch() 分发
     }
 
     class handlers_module {
-        <<module>>
-        +cmd_create_practice()
-        +cmd_export_practice()
-        +HANDLERS dict
+        <<模块>>
+        +cmd_create_practice() 创建练习命令
+        +cmd_export_practice() 导出练习命令
+        +HANDLERS dict 处理器字典
     }
 
     class generator_module {
-        <<module>>
-        +generate_practice()
-        +_session_id()
+        <<模块>>
+        +generate_practice() 生成练习
+        +_session_id() 会话ID生成
     }
 
     class repository_module {
-        <<module>>
-        +save_practice()
-        +load_practice()
-        DATA_DIR static
+        <<模块>>
+        +save_practice() 保存练习
+        +load_practice() 加载练习
+        DATA_DIR static 数据目录静态变量
     }
 
     class grader_module {
-        <<module>>
-        +grade()
-        +import_and_grade()
+        <<模块>>
+        +grade() 批改
+        +import_and_grade() 导入并批改
     }
 
     Application --> handlers_module : HANDLERS dict
@@ -72,50 +72,51 @@ classDiagram
 
     class Application {
         -io: TextIO
-        -services: ServiceContainer
-        -commands: CommandRegistry
-        -navigator: MenuNavigator
-        +run()
+        -services: ServiceContainer 服务容器
+        -commands: CommandRegistry 命令注册表
+        -navigator: MenuNavigator 菜单导航器
+        +run() 运行
     }
 
     class ServiceContainer {
-        +repository: CsvPracticeRepository
-        +generator: PracticeGeneratorService
-        +grader: GradingService
-        +analyzer: AnalysisService
-        +export: ExportService
-        +interactive: InteractivePracticeService
+        +repository: CsvPracticeRepository 练习仓库
+        +generator: PracticeGeneratorService 练习生成服务
+        +grader: GradingService 批改服务
+        +analyzer: AnalysisService 分析服务
+        +export: ExportService 导出服务
+        +interactive: InteractivePracticeService 互动练习服务
     }
 
     class CommandRegistry {
-        -_commands: dict
-        +execute(name, io)
+        -_commands: dict 命令字典
+        +execute(name, io) 执行命令
     }
 
     class Command {
         <<interface>>
-        +execute(io, services)
+        <<接口>>
+        +execute(io, services) 执行
     }
 
     class CsvPracticeRepository {
-        -_data_dir: Path
-        +save_practice()
-        +load_practice()
+        -_data_dir: Path 数据目录路径
+        +save_practice() 保存练习
+        +load_practice() 加载练习
     }
 
     class PracticeGeneratorService {
-        -_repository
-        -_session_ids: SessionIdBuilder
-        +generate()
+        -_repository 仓库依赖
+        -_session_ids: SessionIdBuilder 会话ID构建器
+        +generate() 生成练习
     }
 
     class GradingService {
-        +grade()
-        +import_and_grade()
+        +grade() 批改
+        +import_and_grade() 导入并批改
     }
 
     class SessionIdBuilder {
-        +build()
+        +build() 构建ID
     }
 
     Application --> ServiceContainer
