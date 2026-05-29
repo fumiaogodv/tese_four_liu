@@ -13,8 +13,8 @@ EXPRESSION_PATTERN = re.compile(r"^(\d+)([+\-])(\d+)$")
 ANSWER_LINE_PATTERN = re.compile(
     r"^(\d+)([+\-])(\d+)=(\s*)(-?\d+)\s*$"
 )
-# session_id：日期+类型简写
-SESSION_ID_PATTERN = re.compile(r"^\d{8}_[a-z]+$")
+# session_id：日期+类型简写，可带序号如 20260528_add_2
+SESSION_ID_PATTERN = re.compile(r"^\d{8}_[a-z]+(_\d+)?$")
 
 
 def parse_expression(expr: str) -> tuple[int, str, int, int]:

@@ -1,6 +1,16 @@
-# 口算练习数据处理 — 设计文档
+# 口算练习系统 — 设计文档
 
-对应课程案例 **第 4 部分：数据处理的软件构造**。
+对应课程案例 **第 4 部分（数据处理）** 与 **第 5 部分（用户交互）**。
+
+## 第 5 部分：程序集成与 CLI 界面
+
+- **单一入口**：`main.py` → `main()` → `Application.run()`
+- **统一菜单**：`src/constants.py` 中 `MAIN_MENU_ITEMS`（前5项华经理，第6项小明）
+- **菜单导航**：`src/menu.py` `MenuNavigator`
+- **交互练习**：`src/interactive.py` 逐题输入、即时判题、保存 CSV
+- **I/O 抽象**：`src/io/console.py` 便于测试与故障隔离
+
+详见 [UI_PROTOTYPE.md](./UI_PROTOTYPE.md)、[INTERACTION_DESIGN.md](./INTERACTION_DESIGN.md)、[CLASS_DIAGRAM.md](./CLASS_DIAGRAM.md)、[MENU_STATE_DIAGRAM.md](./MENU_STATE_DIAGRAM.md)、[STATIC_ANALYSIS.md](./STATIC_ANALYSIS.md)。
 
 ## 1. 业务背景
 
@@ -66,7 +76,8 @@
 | `grader` | 判题 |
 | `analyzer` | 统计展示 |
 | `export` | 打印文本 |
-| `app` | 交互菜单 |
+| `app` | 应用主循环 |
+| `menu` / `handlers` / `interactive` | CLI 菜单与用户交互 |
 
 ## 9. 运行方式
 

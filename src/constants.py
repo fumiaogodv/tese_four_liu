@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable
 
 # 练习类型 -> 生成策略键
 PRACTICE_TYPE_LABELS: dict[str, str] = {
@@ -25,15 +24,20 @@ GENERATION_RULES: dict[str, dict[str, int]] = {
     "mixed": {"max_sum": 100, "min_diff": 0, "count": 50},
 }
 
-# 主菜单：编号 -> (标题, 处理函数名)
+# 统一主菜单（故事6 / 图5.1）：前5项华经理，第6项小明
+MAIN_MENU_ITEMS: list[tuple[str, str, str, str]] = [
+    ("1", "批量生成练习题", "create_practice", "manager"),
+    ("2", "挑选并导出练习卷", "export_practice", "manager"),
+    ("3", "导入答案并批改", "import_and_grade", "manager"),
+    ("4", "查看练习成绩统计", "list_results", "manager"),
+    ("5", "错题与薄弱题目分析", "analyze_wrong", "manager"),
+    ("6", "交互式口算练习", "interactive_practice", "student"),
+    ("0", "退出", "exit", "all"),
+]
+
+# 兼容第4部分旧引用
 MENU_ITEMS: list[tuple[str, str, str]] = [
-    ("1", "生成练习卷并保存(CSV)", "create_practice"),
-    ("2", "导出练习卷到文本(便于打印)", "export_practice_text"),
-    ("3", "导入学生答案并自动判题", "import_and_grade"),
-    ("4", "查看练习成绩列表", "list_results"),
-    ("5", "分析错题与薄弱题目", "analyze_wrong"),
-    ("6", "按日期查看单次练习详情", "show_session_detail"),
-    ("0", "退出", "exit"),
+    (k, t, h) for k, t, h, _ in MAIN_MENU_ITEMS if h != "interactive_practice"
 ]
 
 # CSV 表头（契约：列名固定）
@@ -71,11 +75,23 @@ CSV_WRONG_STAT_HEADERS = [
 
 
 @dataclass(frozen=True)
+class MainMenuAction:
+    key: str
+    title: str
+    handler_name: str
+    role: str  # manager | student | all
+
+
+@dataclass(frozen=True)
 class MenuAction:
     key: str
     title: str
     handler_name: str
 
 
+def main_menu_actions() -> list[MainMenuAction]:
+    return [MainMenuAction(k, t, h, r) for k, t, h, r in MAIN_MENU_ITEMS]
+
+
 def menu_actions() -> list[MenuAction]:
-    return [MenuAction(k, t, h) for k, t, h in MENU_ITEMS]
+    return [MenuAction(k, t, h) for k, t, h in MAIN_MENU_ITEMS if h != "exit"]

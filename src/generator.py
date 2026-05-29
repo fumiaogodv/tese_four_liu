@@ -13,16 +13,27 @@ from src.parsers import format_expression
 
 
 def _session_id(practice_type: str, day: date | None = None) -> str:
+    """生成唯一 session_id，同日同类型多次练习自动追加序号。"""
     d = day or date.today()
-    return f"{d.strftime('%Y%m%d')}_{practice_type[:3]}"
+    base = f"{d.strftime('%Y%m%d')}_{practice_type[:3]}"
+    try:
+        from src.repository import list_session_ids
+
+        existing = set(list_session_ids())
+    except OSError:
+        existing = set()
+    if base not in existing:
+        return base
+    n = 2
+    while f"{base}_{n}" in existing:
+        n += 1
+    return f"{base}_{n}"
 
 
 def _random_add() -> tuple[str, int]:
     """加法：和 < 100。"""
     a = random.randint(0, 99)
     b = random.randint(0, 99 - a)
-    if b == 0 and a > 0:
-        b = random.randint(1, min(99 - a, 99))
     expr = format_expression(a, "+", b)
     return expr, a + b
 
