@@ -1,78 +1,68 @@
-# 口算练习系统（软件构造案例 第4~5部分）
+# 口算练习系统（软件构造案例 第4~7部分）
 
-整合故事1~6：**出题、导出、批改、统计、交互练习**，单一 `main()` 入口。
+整合故事1~7：统一 CLI、数据处理、交互练习、**面向对象重构**、**可执行程序打包**。
 
-## 环境
+## 快速开始
+
+### 开发模式
 
 ```powershell
 cd c:\Users\godv\Desktop\vibe_coding\test_four_liu
 python -m venv venv
 .\venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-```
-
-## 运行（唯一入口）
-
-```powershell
 python main.py
 ```
 
-### 主菜单（图 5.1）
+### 打包为 exe（故事7）
+
+```powershell
+.\scripts\build.ps1
+# 输出: dist\口算练习系统.exe
+```
+
+复制 exe 到任意 Windows 机器即可运行，无需安装 Python。详见 [docs/BUILD.md](docs/BUILD.md)。
+
+## 主菜单
 
 | 编号 | 角色 | 功能 |
 |------|------|------|
-| 1 | 华经理 | 批量生成练习题 |
-| 2 | 华经理 | 挑选并导出练习卷 |
-| 3 | 华经理 | 导入答案并批改 |
-| 4 | 华经理 | 查看练习成绩统计 |
-| 5 | 华经理 | 错题与薄弱题目分析 |
-| 6 | 小明 | **交互式口算练习**（机上作答、即时批改） |
+| 1~5 | 华经理 | 生成 / 导出 / 批改 / 统计 / 错题分析 |
+| 6 | 小明 | 交互式口算练习 |
 | 0 | — | 退出 |
 
-## 测试
+## 测试（TDD / 回归）
 
 ```powershell
 pytest tests/ -v
 ```
 
-## 文档（第5部分检查要点）
+## 文档索引
 
-| 文档 | 内容 |
+| 部分 | 文档 |
 |------|------|
-| [docs/UI_PROTOTYPE.md](docs/UI_PROTOTYPE.md) | 用户界面原型 |
-| [docs/INTERACTION_DESIGN.md](docs/INTERACTION_DESIGN.md) | 交互设计原则 |
-| [docs/STATIC_ANALYSIS.md](docs/STATIC_ANALYSIS.md) | 五类故障静态分析 |
-| [docs/CLASS_DIAGRAM.md](docs/CLASS_DIAGRAM.md) | 类结构 UML |
-| [docs/MENU_STATE_DIAGRAM.md](docs/MENU_STATE_DIAGRAM.md) | 菜单状态转换 UML |
-| [docs/DESIGN.md](docs/DESIGN.md) | 整体设计（含第4部分） |
-| [docs/FLOW.md](docs/FLOW.md) | 业务流程图 |
+| 第4部分 数据处理 | [DESIGN.md](docs/DESIGN.md), [FLOW.md](docs/FLOW.md) |
+| 第5部分 用户交互 | [UI_PROTOTYPE.md](docs/UI_PROTOTYPE.md), [CLASS_DIAGRAM.md](docs/CLASS_DIAGRAM.md) |
+| 第7部分 重构与交付 | [REFACTORING.md](docs/REFACTORING.md), [TDD.md](docs/TDD.md), [BUILD.md](docs/BUILD.md) |
 
-## 目录结构
+## 重构后目录结构
 
 ```
-main.py                 # 唯一 main() 入口
+main.py                     # 唯一入口
 src/
-  app.py                # Application 主循环
-  menu.py               # 菜单导航
-  handlers.py           # 华经理端功能
-  interactive.py        # 小明交互练习
-  io/console.py         # 控制台 I/O 抽象
-  generator.py          # 出题（故事1~3）
-  repository.py         # CSV 存储（故事4）
-  ...
-data/                   # CSV 与导出文件
-docs/                   # 设计文档
-tests/                  # 单元测试
+  container.py              # 依赖注入容器
+  paths.py                  # 开发/打包双模式路径
+  repositories/             # 仓储层
+  services/                 # 业务服务层
+  commands/                 # 命令模式（菜单功能）
+  app.py                    # Application 主循环
+oral_calc.spec              # PyInstaller 配置
+scripts/build.ps1           # 一键打包
+tests/                      # 单元测试 + TDD 示例
 ```
 
-## Git / Gitee 规范
+## 编程规范
 
-```powershell
-git add .
-git commit -m "feat: 完成第5部分用户交互集成"
-git remote add origin <你的gitee仓库地址>
-git push -u origin main
-```
-
-- 提交信息：`feat:` / `fix:` / `docs:` + 简述
-- 不提交 `venv/`、`__pycache__/`
+- 提交信息：`feat:` / `fix:` / `refactor:` / `docs:` + 简述
+- 新功能先写测试（TDD）再实现
+- 不提交 `venv/`、`dist/`、`build/`

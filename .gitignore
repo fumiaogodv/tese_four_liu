@@ -9,6 +9,7 @@ htmlcov/
 .eggs/
 dist/
 build/
+*.spec.bak
 .idea/
 .vscode/
 *.log

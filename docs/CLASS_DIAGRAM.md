@@ -4,86 +4,97 @@
 classDiagram
     direction TB
 
+    %% 使用更兼容的类名中文化语法
+    class Application["应用程序 (Application)"]
+    class MenuNavigator["菜单导航器 (MenuNavigator)"]
+    class ConsoleIO["控制台输入输出 (ConsoleIO)"]
+    class TextIO["文本输入输出接口 (TextIO)"]
+    class PracticeSession["练习会话 (PracticeSession)"]
+    class ExerciseItem["练习题目项 (ExerciseItem)"]
+    class StudentAnswer["学生答案 (StudentAnswer)"]
+    class GradeResult["批改成绩结果 (GradeResult)"]
+    class GradeDetail["成绩详情明细 (GradeDetail)"]
+
     class Application {
-        -io: TextIO
-        -navigator: MenuNavigator
-        +run()
-        -_dispatch(handler_name)
+        -输入输出对象: TextIO
+        -菜单导航: MenuNavigator
+        +运行启动() run
+        -_分发调度(处理器名称) _dispatch
     }
 
     class MenuNavigator {
-        -io: TextIO
-        +state: MenuState
-        +render_main_menu()
-        +read_choice() str
-        +transition(choice) tuple
+        -输入输出对象: TextIO
+        +当前状态: MenuState
+        +渲染主菜单()
+        +读取用户选择() str
+        +状态转换(选择) tuple
     }
 
     class ConsoleIO {
-        +prompt(message, default) str
-        +println(message)
+        +提示输入(消息, 默认值) str
+        +打印换行(消息)
     }
 
     class TextIO {
         <<interface>>
-        +prompt()
-        +println()
+        +提示输入()
+        +打印换行()
     }
 
     class PracticeSession {
-        +session_id: str
-        +practice_date: str
-        +practice_type: str
-        +exercises: list
-        +total: int
+        +会话ID: str
+        +练习日期: str
+        +练习类型: str
+        +题目列表: list
+        +总题数: int
     }
 
     class ExerciseItem {
-        +seq: int
-        +expression: str
-        +correct_answer: int
+        +题号: int
+        +算式表达式: str
+        +正确答案: int
     }
 
     class StudentAnswer {
-        +seq: int
-        +expression: str
-        +student_answer: int
+        +题号: int
+        +算式表达式: str
+        +学生所填答案: int
     }
 
     class GradeResult {
-        +session_id: str
-        +total: int
-        +correct: int
-        +score: float
-        +details: list
+        +会话ID: str
+        +总题数: int
+        +答对题数: int
+        +最终得分: float
+        +批改详情: list
     }
 
+    %% 关系连线
     Application --> MenuNavigator
     Application --> TextIO
     ConsoleIO ..|> TextIO
     MenuNavigator --> TextIO
 
-    Application ..> handlers : dispatch
-    Application ..> interactive : dispatch
+    Application ..> 管理员业务处理器 : 分发调度
+    Application ..> 学生交互业务 : 分发调度
 
-    note for handlers "华经理端命令\ncreate/export/import/..."
-
-    note for interactive "小明交互练习\ncollect_answers + grade"
+    note for 管理员业务处理器 "【华经理端命令】\n批量生成/挑选导出/导入批改/..."
+    note for 学生交互业务 "【小明交互练习】\n收集答案 + 自动批改"
 
     PracticeSession *-- ExerciseItem
     GradeResult o-- GradeDetail
 
-    handlers ..> generator
-    handlers ..> repository
-    handlers ..> grader
-    handlers ..> analyzer
-    interactive ..> generator
-    interactive ..> grader
-    interactive ..> repository
+    管理员业务处理器 ..> 题目生成器
+    管理员业务处理器 ..> 数据仓库
+    管理员业务处理器 ..> 批改器
+    管理员业务处理器 ..> 错题分析器
+    学生交互业务 ..> 题目生成器
+    学生交互业务 ..> 批改器
+    学生交互业务 ..> 数据仓库
 
-    repository ..> PracticeSession
-    grader ..> GradeResult
-    generator ..> PracticeSession
+    数据仓库 ..> PracticeSession
+    批改器 ..> GradeResult
+    题目生成器 ..> PracticeSession
 ```
 
 ## 模块分层

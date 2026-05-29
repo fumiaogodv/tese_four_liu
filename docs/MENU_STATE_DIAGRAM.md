@@ -2,47 +2,43 @@
 
 ```mermaid
 stateDiagram-v2
-    [*] --> MainMenu : 启动 main()
+    [*] --> MenuLoop : 启动 main()
+    MenuLoop --> Exit : 输入 0
 
-    MainMenu --> MainMenu : 无效输入 / 功能执行完毕
-    MainMenu --> Exit : 输入 0
-
-    state MainMenu {
+    state MenuLoop {
         [*] --> Display
         Display --> WaitInput : 渲染菜单
-        WaitInput --> Dispatch : 有效选项 1~6
         WaitInput --> Display : 无效选项
+        WaitInput --> ManagerCmd : 有效选项 1~5
+        WaitInput --> StudentCmd : 有效选项 6
     }
 
-    state Dispatch {
-        [*] --> ManagerCmd : 选项 1~5
-        [*] --> StudentCmd : 选项 6
+    state ManagerCmd {
+        [*] --> CreatePractice : 1 批量生成
+        [*] --> ExportPractice : 2 挑选导出
+        [*] --> ImportGrade : 3 导入批改
+        [*] --> ListResults : 4 成绩统计
+        [*] --> AnalyzeWrong : 5 错题分析
 
-        state ManagerCmd {
-            [*] --> CreatePractice : 1 批量生成
-            [*] --> ExportPractice : 2 挑选导出
-            [*] --> ImportGrade : 3 导入批改
-            [*] --> ListResults : 4 成绩统计
-            [*] --> AnalyzeWrong : 5 错题分析
-            CreatePractice --> [*]
-            ExportPractice --> [*]
-            ImportGrade --> [*]
-            ListResults --> [*]
-            AnalyzeWrong --> [*]
-        }
-
-        state StudentCmd {
-            [*] --> ChooseMode : 新练习 / 已有卷
-            ChooseMode --> Answering : 加载题目
-            Answering --> Answering : 逐题输入
-            Answering --> ShowScore : 全部答完
-            Answering --> MainMenu : 输入 q 取消
-            ShowScore --> [*] : 保存成绩
-        }
-
-        ManagerCmd --> MainMenu : 完成
-        StudentCmd --> MainMenu : 完成
+        CreatePractice --> [*]
+        ExportPractice --> [*]
+        ImportGrade --> [*]
+        ListResults --> [*]
+        AnalyzeWrong --> [*]
     }
+
+    state StudentCmd {
+        [*] --> ChooseMode : 新练习 / 已有卷
+        ChooseMode --> Answering : 加载题目
+        Answering --> Answering : 逐题输入
+        Answering --> ShowScore : 全部答完
+        Answering --> QuitStudent : 输入 q 取消
+        ShowScore --> [*] : 保存成绩
+    }
+
+    %% 从子状态机返回主循环
+    ManagerCmd --> MenuLoop : 功能执行完毕 / 无效输入
+    StudentCmd --> MenuLoop : 完成 / 取消
 
     Exit --> [*] : 再见
 ```

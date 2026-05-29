@@ -1,15 +1,7 @@
-import pytest
-
 from src.generator import generate_practice
 from src.grader import grade
 from src.models import StudentAnswer
 from src.repository import load_practice, load_wrong_stats, save_grade_result, save_practice
-
-
-@pytest.fixture(autouse=True)
-def isolated_data(tmp_path, monkeypatch):
-    monkeypatch.setattr("src.repository.DATA_DIR", tmp_path)
-    yield
 
 
 def test_save_and_load_practice():
