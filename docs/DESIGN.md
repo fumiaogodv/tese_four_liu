@@ -2,6 +2,19 @@
 
 对应课程案例 **第 4 部分（数据处理）** 与 **第 5 部分（用户交互）**。
 
+## 第七部分：GUI软件构造
+
+| 要点 | 交付 |
+| ---- | ---- |
+| OOP 开发 | OOP 开发 |
+| MVC 分层，复用 ServiceContainer | MVC 分层，复用 ServiceContainer |
+| GUI 设计原则 | docs/GUI_DESIGN.md |
+| 窗口 GUI 程序 | MainWindow + 6 个面板 |
+| 观察者模式 | StatusBarObserver、_SessionRefreshObserver |
+| 事件驱动 | 按钮 command、<Return>、窗口关闭、filedialog |
+| 类图 | docs/GUI_CLASS_DIAGRAM.md |
+| GUI 测试 | tests/test_gui_controller.py、test_gui_events.py（不测窗口，测 Controller） |
+
 ## 第六部分：软件重构与交付
 | 要点 | 交付物 |
 | :--- | :--- |
