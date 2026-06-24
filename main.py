@@ -2,7 +2,7 @@
 """
 口算练习系统 — 唯一启动入口 main()
 
-整合故事1~6：出题、导出、批改、统计、交互练习。
+默认启动 GUI；使用 --cli 进入命令行界面。
 """
 
 
@@ -14,9 +14,14 @@ def main() -> None:
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
 
-    from src.app import run
+    if "--cli" in sys.argv:
+        from src.app import run
 
-    run()
+        run()
+    else:
+        from src.gui.main_window import run_gui
+
+        run_gui()
 
 
 if __name__ == "__main__":
